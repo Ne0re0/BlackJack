@@ -1,14 +1,16 @@
 # BlackJack
-Après avoir découvert les jeux du casino, mon esprit est resté bloqué sur le jeu du BlackJack (et ce qu'il y avait dans mon porte monnaie aussi...).  
+Après avoir découvert les jeux du casino, mon esprit est resté bloqué sur le jeu du BlackJack (et ce qu'il y avait dans mon porte monnaie aussi mais c'est un autre sujet...).  
 Comme ce jeu m'intriguait, j'ai fini par me poser des questions. 
-- Pourquoi leur IA s'arrête de piocher à partir de 17 points ?
+- Pourquoi l'IA du casino s'arrête de piocher à partir de 17 points ?
 - Quel est la meilleur stratégie à suivre pour maximiser ses chances de gagner ?
+Pour répondre à ces questions, j'ai : 
 Dans un premier temps, j'ai codée le jeu.
-Dans un deuxième temps, j'ai pu établir le pourquoi 17 points ? 
+Dans un deuxième temps, j'ai pu codée un algorithme qui faisait joueur un bot contre le croupier  
 Mais ça me paraissait trop naif comme possibilité  
+Alors, après ça, j'ai décidé de me penché sur le fait qu'on connaissait la première carte tirée par le croupier avant de jouer.
 
-On sait que le croupier pioche une carte avant même que nous recevions les deux notres.
-Mais alors est-il possible de faire varier sa stratégie suivant la valeur qu'il tire ?
+Donc, on sait que le croupier pioche une carte avant même que nous recevions les deux notres.
+Mais alors est-il utile de faire varier sa stratégie suivant la valeur qu'il tire ?
 Par exemple, s'il pioche une carte en dessous ou égale à 5, il sera obligé de piocher deux autres cartes car le maximum qu'il peut tirer est 11 (un As) et 5 + 11 = 16 qui est inferieur à 17.
 En revanche, s'il tire une carte supérieur ou égale à 6, il peut gagner seulement avec une seule carte de plus.
 ## Etape 1 : Le jeu
