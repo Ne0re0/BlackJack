@@ -54,5 +54,5 @@ Je développerai peut-être cette partie plus tard, elle n'était pas le coeur d
 ```bash
 git clone git@github.com:Ne0re0/BlackJack.git
 cd BlackJack
-/bin/python /home/neo/Projets/BlackJack/blackjack.py
+python blackjack.py
 ```
