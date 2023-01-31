@@ -284,4 +284,4 @@ class BlackJack():
 
 if __name__ == '__main__':
     b = BlackJack()
-    print(b.etudeStrategieUneValeurMax(21))
+    b.jouer()
