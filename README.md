@@ -32,7 +32,7 @@ Pour plus de détail : https://www.guide-blackjack.com/regles-du-black-jack.html
 
 ## Etape 2 : La recherche
 
-### Partie naive : 
+### 2.1 Partie naive : 
 Pour cette partie, j'ai codée une méthode qui permet de jouer un tour de manière naif, (i.e. le bot ne s'arrête que quand la somme des cartes dépasse ou est égale à la valeur donnée).
 
 Grâce à ça, j'ai pu établir une moyenne du pourcentage de victoire et de défaite sur 1 000 000 de partie.
@@ -43,8 +43,15 @@ J'ai ensuite rempli un tableau avec ces valeurs et de là, est sorti ce graphiqu
 On peut voir que la probabilité d'avoir une partie gagnante ou ex-aequo est la plus élevée lorsqu'on arrête de tirer quand la somme de nos cartes est au moins de 17.  
 Cela appuie le fait que dans les casinos les IA qui servent de croupier s'arrêtent de tirer dès qu'elles ont un total de 17 points au moins.
 
-### Partie complète : 
-Danc cette partie, on prend en compte la première carte piochée par le croupier.
+### 2.2 Partie complète : 
+Dans cette partie, on prend en compte la première carte piochée par le croupier et on teste quelle est la meilleur stratégie.
+Après avoir codée 2 méthodes permettant de tester la probabilité, en est sorti le fichier ***etudePremiereCarteConnue.pdf***
+Dans ce tableau, ce qui saute d'abord aux yeux est que si la première carte piochées par le croupier est supérieur ou égale à 7, il est plus probable de gagner ou d'égaliser si on pioche au moins 17 points.  
+En revanche, dans les cas inférieurs, il est plus intéressant de ne piocher que de manière à avoir au moins 13 points.
+
+On peut donc supposer que la "meilleur" stratégie est plutôt celle de piocher 14 points si la carte piochée par le croupier est inférieur à 7 et de piocher au moins 17 points autrement.
+
+
 
 ## Etape 3 : La partie graphique
 Je développerai peut-être cette partie plus tard, elle n'était pas le coeur de l'interrogation

@@ -108,6 +108,13 @@ class BlackJack():
         """Le paquet de jeu redevient tout neuf"""
         self.cartesRestantes = ['2♥', '2♦', '2♣', '2♠', '3♥', '3♦', '3♣', '3♠', '4♥', '4♦', '4♣', '4♠', '5♥', '5♦', '5♣', '5♠', '6♥', '6♦', '6♣', '6♠', '7♥', '7♦', '7♣', '7♠', '8♥', '8♦', '8♣', '8♠', '9♥', '9♦', '9♣', '9♠', '10♥', '10♦', '10♣', '10♠', 'V♥', 'V♦', 'V♣', 'V♠', 'D♥', 'D♦', 'D♣', 'D♠', 'R♥', 'R♦', 'R♣', 'R♠', 'A♥', 'A♦', 'A♣', 'A♠']
 
+    def enleverCarte(self,carte):
+        """Enleve la carte passée en parametre du paquet"""
+        try : 
+            self.cartesRestantes.remove(carte)
+        except:
+            pass
+
     def tour(self, croupier, joueur, montantParie):
         """Implémente un tour de jeu"""
         # Creation des variables et affichage de départ
@@ -230,7 +237,7 @@ class BlackJack():
                 partieEnCours = "O"
 
 
-    def tourIAcontreIA(self, croupier, bot, montantParie):
+    def tourIAcontreIANaive(self, croupier, bot, montantParie):
         croupier.ajouterCarte(self.piocher())
         while bot.getSommeCartes() < bot.getValeurApresLaquelleOnNePiochePlus():
             bot.ajouterCarte(self.piocher())
@@ -247,7 +254,7 @@ class BlackJack():
         elif croupier.getSommeCartes() < bot.getSommeCartes():
             return 2*montantParie
 
-    def etudeStrategieUneValeurMax(self,aPartirDeCeNombreOnArreteDePiocher):
+    def etudeStrategieUneValeurMaxNaive(self,aPartirDeCeNombreOnArreteDePiocher):
         pourcentages = {"P":0,"E":0,"G":0}
         croupier = Joueur()
         croupier.setNom("Croupier")
@@ -264,7 +271,7 @@ class BlackJack():
             croupier.resetMain()
             montantParie = 1
             bot.soustraireMontantJouable(montantParie)
-            resultatDuTour = self.tourIAcontreIA(croupier, bot, montantParie)
+            resultatDuTour = self.tourIAcontreIANaive(croupier, bot, montantParie)
             if resultatDuTour == 0 :
                 pourcentages["P"] += 1
             elif resultatDuTour == montantParie :
@@ -275,11 +282,65 @@ class BlackJack():
         print(f"Somme à la fin : {bot.getMontantJouable()}")
         return pourcentages
 
-    def etudeStrategie(self):
+    def etudeStrategieNaive(self):
         print("Le croupier s'arrête de piocher quand il a au moins 17 points")
         for valeurMax in range(4,21):
             print(f"On s'arrete de piocher lorsqu'on a au moins {valeurMax} points")
-            print(self.etudeStrategieUneValeurMax(valeurMax))
+            print(self.etudeStrategieUneValeurMaxNaive(valeurMax))
+
+    def tourIAcontreIAPremiereCarteDefinie(self, croupier, bot, premiereCarte, montantParie):
+        croupier.ajouterCarte(premiereCarte)
+        self.enleverCarte(premiereCarte)
+        while bot.getSommeCartes() < bot.getValeurApresLaquelleOnNePiochePlus():
+            bot.ajouterCarte(self.piocher())
+        while croupier.getSommeCartes() < croupier.getValeurApresLaquelleOnNePiochePlus():
+            croupier.ajouterCarte(self.piocher())
+        if bot.getSommeCartes() > 21 : 
+            return 0
+        elif croupier.getSommeCartes() > 21 :
+            return 2*montantParie
+        elif croupier.getSommeCartes() == bot.getSommeCartes():
+            return montantParie
+        elif croupier.getSommeCartes() > bot.getSommeCartes():
+            return 0
+        elif croupier.getSommeCartes() < bot.getSommeCartes():
+            return 2*montantParie
+
+    def etudeStrategieUneValeurMaxEtPremiereCarteConnue(self, carteDepart, aPartirDeCeNombreOnArreteDePiocher):
+        pourcentages = {"P":0,"E":0,"G":0}
+        croupier = Joueur()
+        croupier.setNom("Croupier")
+        croupier.setValeurApresLaquelleOnNePiochePlus(17)
+
+        bot = Joueur()
+        bot.setNom("Bot")
+        bot.setValeurApresLaquelleOnNePiochePlus(aPartirDeCeNombreOnArreteDePiocher) # Oui oui il y a seulement deux appels
+        bot.setMontantJouable(100000)
+
+        for k in range(100000):
+            self.resetJeu()
+            bot.resetMain()
+            croupier.resetMain()
+            montantParie = 1
+            bot.soustraireMontantJouable(montantParie)
+            resultatDuTour = self.tourIAcontreIAPremiereCarteDefinie(croupier, bot, carteDepart, montantParie)
+            if resultatDuTour == 0 :
+                pourcentages["P"] += 1
+            elif resultatDuTour == montantParie :
+                pourcentages["E"] += 1
+            else : 
+                pourcentages["G"] += 1
+            bot.ajouterMontantJouable(resultatDuTour)
+        return pourcentages
+
+    def etudeStrategiePremiereCarteConnue(self):
+        for carte in ['2♥', '3♥', '4♥',  '5♥',  '6♥', '7♥', '8♥','9♥', '10♥', 'V♥', 'D♥', 'R♥', 'A♥']:
+            print(carte)
+            for valeurMax in range(4,21):
+                x = self.etudeStrategieUneValeurMaxEtPremiereCarteConnue(carte,valeurMax)
+                print(f'{x["P"]},{x["E"]},{x["G"]}')
+
+
 
 
 if __name__ == '__main__':
